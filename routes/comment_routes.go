@@ -8,7 +8,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// SetupCommentRoutes sets up routes for comment CRUD operations
+// SetupCommentRoutes menyiapkan rute untuk endpoints komentar
 func SetupCommentRoutes(router *mux.Router) {
     router.HandleFunc("/comments", controllers.CreateComment).Methods("POST")
     router.HandleFunc("/comments/{id}", controllers.RetrieveCommentByID).Methods("GET")

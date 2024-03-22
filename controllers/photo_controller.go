@@ -12,7 +12,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// CreatePhoto handles creating a new photo
+// CreatePhoto menangani pembuatan foto baru
 func CreatePhoto(w http.ResponseWriter, r *http.Request) {
     var newPhoto models.Photo
     err := json.NewDecoder(r.Body).Decode(&newPhoto)
@@ -21,21 +21,21 @@ func CreatePhoto(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // Save the photo to the database
+    // Simpan foto ke database
     err = newPhoto.Save()
     if err != nil {
         http.Error(w, "Failed to create photo", http.StatusInternalServerError)
         return
     }
 
-    // Respond with the newly created photo
+    // Tanggapi dengan foto yang baru dibuat
     w.WriteHeader(http.StatusCreated)
     json.NewEncoder(w).Encode(newPhoto)
 }
 
-// GetPhoto handles retrieving a photo by its ID
+// GetPhoto menangani pengambilan foto dengan ID-nya
 func GetPhoto(w http.ResponseWriter, r *http.Request) {
-    // Extract photo ID from request parameters
+    // Ekstrak ID foto dari parameter permintaan
     photoIDStr := mux.Vars(r)["photoId"]
     photoID, err := strconv.Atoi(photoIDStr)
     if err != nil {
@@ -43,24 +43,80 @@ func GetPhoto(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // Get the photo from the database
+    // Dapatkan foto dari database
     photo, err := models.GetPhotoByID(uint(photoID))
     if err != nil {
         http.Error(w, "Photo not found", http.StatusNotFound)
         return
     }
 
-    // Respond with the photo
+    // Tanggapi dengan foto
     w.WriteHeader(http.StatusOK)
     json.NewEncoder(w).Encode(photo)
 }
 
-// UpdatePhoto handles updating a photo
+// UpdatePhoto menangani pembaruan foto
 func UpdatePhoto(w http.ResponseWriter, r *http.Request) {
-    // Implement the logic for updating a photo here
+    // Ekstrak ID foto dari parameter permintaan
+    photoIDStr := mux.Vars(r)["photoId"]
+    photoID, err := strconv.Atoi(photoIDStr)
+    if err != nil {
+        http.Error(w, "Invalid photo ID", http.StatusBadRequest)
+        return
+    }
+
+    // Mengubah request body menjadi objek foto yang diperbarui
+    var updatedPhoto models.Photo
+    err = json.NewDecoder(r.Body).Decode(&updatedPhoto)
+    if err != nil {
+        http.Error(w, "Invalid request body", http.StatusBadRequest)
+        return
+    }
+
+    // Dapatkan foto dari database
+    photo, err := models.GetPhotoByID(uint(photoID))
+    if err != nil {
+        http.Error(w, "Photo not found", http.StatusNotFound)
+        return
+    }
+
+    // Perbarui informasi foto
+    err = photo.Update(&updatedPhoto)
+    if err != nil {
+        http.Error(w, "Failed to update photo", http.StatusInternalServerError)
+        return
+    }
+
+    // Tanggapi dengan foto yang diperbarui
+    w.WriteHeader(http.StatusOK)
+    json.NewEncoder(w).Encode(updatedPhoto)
 }
 
-// DeletePhoto handles deleting a photo
+// DeletePhoto menangani penghapusan foto
 func DeletePhoto(w http.ResponseWriter, r *http.Request) {
-    // Implement the logic for deleting a photo here
+    // Ekstrak ID foto dari parameter permintaan
+    photoIDStr := mux.Vars(r)["photoId"]
+    photoID, err := strconv.Atoi(photoIDStr)
+    if err != nil {
+        http.Error(w, "Invalid photo ID", http.StatusBadRequest)
+        return
+    }
+
+    // Dapatkan foto dari database
+    photo, err := models.GetPhotoByID(uint(photoID))
+    if err != nil {
+        http.Error(w, "Photo not found", http.StatusNotFound)
+        return
+    }
+
+    // Menghapus foto
+    err = photo.Delete()
+    if err != nil {
+        http.Error(w, "Failed to delete photo", http.StatusInternalServerError)
+        return
+    }
+
+    // Tanggapi dengan pesan sukses
+    w.WriteHeader(http.StatusOK)
+    json.NewEncoder(w).Encode(map[string]string{"message": "Photo deleted successfully"})
 }

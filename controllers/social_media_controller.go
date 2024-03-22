@@ -12,7 +12,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// CreateSocialMedia handles the creation of a new social media record
+// CreateSocialMedia menangani pembuatan catatan media sosial baru
 func CreateSocialMedia(w http.ResponseWriter, r *http.Request) {
     var newSocialMedia models.SocialMedia
     err := json.NewDecoder(r.Body).Decode(&newSocialMedia)
@@ -31,9 +31,9 @@ func CreateSocialMedia(w http.ResponseWriter, r *http.Request) {
     json.NewEncoder(w).Encode(newSocialMedia)
 }
 
-// RetrieveSocialMediaByID retrieves a social media record by its ID
+// RetrieveSocialMediaByID mengambil catatan media sosial dengan ID-nya
 func RetrieveSocialMediaByID(w http.ResponseWriter, r *http.Request) {
-    // Extract social media ID from request parameters
+    // Ekstrak ID media sosial dari parameter permintaan
     socialMediaIDStr := mux.Vars(r)["id"]
     socialMediaID, err := strconv.Atoi(socialMediaIDStr)
     if err != nil {
@@ -50,9 +50,9 @@ func RetrieveSocialMediaByID(w http.ResponseWriter, r *http.Request) {
     json.NewEncoder(w).Encode(socialMedia)
 }
 
-// UpdateSocialMediaByID updates a social media record by its ID
+// UpdateSocialMediaByID memperbarui catatan media sosial dengan ID-nya
 func UpdateSocialMediaByID(w http.ResponseWriter, r *http.Request) {
-    // Extract social media ID from request parameters
+    // Ekstrak ID media sosial dari parameter permintaan
     socialMediaIDStr := mux.Vars(r)["id"]
     socialMediaID, err := strconv.Atoi(socialMediaIDStr)
     if err != nil {
@@ -60,7 +60,7 @@ func UpdateSocialMediaByID(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // Decode request body into a social media object
+    // Memecahkan kode isi permintaan menjadi objek media sosial
     var updatedSocialMedia models.SocialMedia
     err = json.NewDecoder(r.Body).Decode(&updatedSocialMedia)
     if err != nil {
@@ -68,7 +68,7 @@ func UpdateSocialMediaByID(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // Update social media information
+    // Perbarui informasi media sosial
     err = models.UpdateSocialMediaByID(uint(socialMediaID), &updatedSocialMedia)
     if err != nil {
         http.Error(w, "Failed to update social media", http.StatusInternalServerError)
@@ -78,9 +78,9 @@ func UpdateSocialMediaByID(w http.ResponseWriter, r *http.Request) {
     json.NewEncoder(w).Encode(updatedSocialMedia)
 }
 
-// DeleteSocialMediaByID deletes a social media record by its ID
+// DeleteSocialMediaByID menghapus catatan media sosial dengan ID-nya
 func DeleteSocialMediaByID(w http.ResponseWriter, r *http.Request) {
-    // Extract social media ID from request parameters
+    // Ekstrak ID media sosial dari parameter permintaan
     socialMediaIDStr := mux.Vars(r)["id"]
     socialMediaID, err := strconv.Atoi(socialMediaIDStr)
     if err != nil {
@@ -88,7 +88,7 @@ func DeleteSocialMediaByID(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // Delete the social media record
+    // Menghapus rekaman media sosial
     err = models.DeleteSocialMediaByID(uint(socialMediaID))
     if err != nil {
         http.Error(w, "Failed to delete social media", http.StatusInternalServerError)

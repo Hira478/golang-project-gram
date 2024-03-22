@@ -12,7 +12,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// CreateComment handles the creation of a new comment
+// CreateComment menangani pembuatan komentar baru
 func CreateComment(w http.ResponseWriter, r *http.Request) {
     var newComment models.Comment
     err := json.NewDecoder(r.Body).Decode(&newComment)
@@ -31,7 +31,7 @@ func CreateComment(w http.ResponseWriter, r *http.Request) {
     json.NewEncoder(w).Encode(newComment)
 }
 
-// RetrieveCommentByID retrieves a comment by its ID
+// RetrieveCommentByID mengambil komentar dengan ID-nya
 func RetrieveCommentByID(w http.ResponseWriter, r *http.Request) {
     commentIDStr := mux.Vars(r)["id"]
     commentID, err := strconv.Atoi(commentIDStr)
@@ -49,7 +49,7 @@ func RetrieveCommentByID(w http.ResponseWriter, r *http.Request) {
     json.NewEncoder(w).Encode(comment)
 }
 
-// UpdateCommentByID updates a comment by its ID
+// UpdateCommentByID memperbarui komentar berdasarkan ID-nya
 func UpdateCommentByID(w http.ResponseWriter, r *http.Request) {
     commentIDStr := mux.Vars(r)["id"]
     commentID, err := strconv.Atoi(commentIDStr)
@@ -74,7 +74,7 @@ func UpdateCommentByID(w http.ResponseWriter, r *http.Request) {
     json.NewEncoder(w).Encode(updatedComment)
 }
 
-// DeleteCommentByID deletes a comment by its ID
+// DeleteCommentByID menghapus komentar berdasarkan ID-nya
 func DeleteCommentByID(w http.ResponseWriter, r *http.Request) {
     commentIDStr := mux.Vars(r)["id"]
     commentID, err := strconv.Atoi(commentIDStr)

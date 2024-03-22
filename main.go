@@ -13,20 +13,20 @@ import (
 )
 
 func main() {
-    // Initialize the database connection
+    // Menginisialisasi koneksi database
     models.InitDB()
 
-    // Initialize the router
+    // Menginisialisasi router
     router := mux.NewRouter()
 
-    // Register routes for users, photos, social media, and comments
+    // Daftarkan rute untuk pengguna, foto, media sosial, dan komentar
     routes.SetupUserRoutes(router)
     routes.SetupPhotoRoutes(router)
     routes.SetupSocialMediaRoutes(router)
     routes.SetupCommentRoutes(router)
 
-    // Start the HTTP server
-    port := ":8080" // specify the port you want to listen on
+    // Mulai server HTTP
+    port := ":8080"
     fmt.Printf("Server listening on port %s\n", port)
     log.Fatal(http.ListenAndServe(port, router))
 }

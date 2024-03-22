@@ -8,7 +8,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// Set up routes for user-related endpoints
+// Menyiapkan rute untuk endpoints terkait user
 func SetupUserRoutes(router *mux.Router) {
     router.HandleFunc("/users/register", controllers.RegisterUser).Methods("POST")
     router.HandleFunc("/users/login", controllers.LoginUser).Methods("POST")

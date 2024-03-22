@@ -8,7 +8,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// SetupPhotoRoutes sets up routes for photo-related endpoints
+// SetupPhotoRoutes menyiapkan rute untuk endpoints terkait foto
 func SetupPhotoRoutes(router *mux.Router) {
     router.HandleFunc("/photos", controllers.CreatePhoto).Methods("POST")
     router.HandleFunc("/photos/{photoId}", controllers.GetPhoto).Methods("GET")

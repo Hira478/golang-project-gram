@@ -19,10 +19,10 @@ type Photo struct {
     UpdatedAt time.Time
 }
 
-// ErrPhotoNotFound is the error returned when a photo is not found
+// ErrPhotoNotFound adalah kesalahan yang dikembalikan ketika foto tidak ditemukan
 var ErrPhotoNotFound = errors.New("photo not found")
 
-// Save saves a new photo record to the database
+// Simpan menyimpan catatan foto baru ke database
 func (p *Photo) Save() error {
     if err := DB.Create(&p).Error; err != nil {
         return err
@@ -30,7 +30,7 @@ func (p *Photo) Save() error {
     return nil
 }
 
-// GetPhotoByID retrieves a photo by its ID from the database
+// GetPhotoByID mengambil foto dengan ID-nya dari database
 func GetPhotoByID(photoID uint) (*Photo, error) {
     var photo Photo
     if err := DB.First(&photo, photoID).Error; err != nil {
@@ -42,7 +42,7 @@ func GetPhotoByID(photoID uint) (*Photo, error) {
     return &photo, nil
 }
 
-// Update updates an existing photo record in the database
+// Pembaruan foto yang ada di database
 func (p *Photo) Update(updatedPhoto *Photo) error {
     if err := DB.Model(p).Updates(updatedPhoto).Error; err != nil {
         return err
@@ -50,7 +50,7 @@ func (p *Photo) Update(updatedPhoto *Photo) error {
     return nil
 }
 
-// Delete deletes a photo record from the database
+// Hapus foto dari database
 func (p *Photo) Delete() error {
     if err := DB.Delete(&p).Error; err != nil {
         return err

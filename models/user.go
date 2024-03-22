@@ -27,7 +27,7 @@ func (u *User) Save() error {
     return nil
 }
 
-// Update updates an existing user record in the database
+// Pembaruan data pengguna yang ada di database
 func (u *User) Update(updatedUser *User) error {
     if err := DB.Model(u).Updates(updatedUser).Error; err != nil {
         return err
@@ -35,7 +35,7 @@ func (u *User) Update(updatedUser *User) error {
     return nil
 }
 
-// Delete deletes a user record from the database
+// Hapus data pengguna dari database
 func (u *User) Delete() error {
     if err := DB.Delete(&u).Error; err != nil {
         return err
@@ -43,10 +43,10 @@ func (u *User) Delete() error {
     return nil
 }
 
-// ErrUserNotFound is the error returned when a user is not found
+// ErrUserNotFound kesalahan yang dikembalikan disaat data pengguna tidak ditemukan
 var ErrUserNotFound = errors.New("user not found")
 
-// GetUserByEmail retrieves a user by their email address
+// GetUserByEmail mengambil data pengguna dengan alamat email
 func GetUserByEmail(email string) (*User, error) {
     var user User
     if err := DB.Where("email = ?", email).First(&user).Error; err != nil {
@@ -58,7 +58,7 @@ func GetUserByEmail(email string) (*User, error) {
     return &user, nil
 }
 
-// GetUserByID retrieves a user by their ID from the database
+// GetUserByID mengambil data pengguna dengan ID mereka dari database
 func GetUserByID(userID uint) (*User, error) {
     var user User
     if err := DB.First(&user, userID).Error; err != nil {

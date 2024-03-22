@@ -13,7 +13,7 @@ import (
 	"MyGram/models"
 )
 
-// RegisterUser handles the registration of a new user
+// RegisterUser menangani pendaftaran pengguna baru
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
     var newUser models.User
     err := json.NewDecoder(r.Body).Decode(&newUser)
@@ -22,7 +22,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // Hash the password before storing it
+    // Hash kata sandi sebelum menyimpannya
     hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
     if err != nil {
         http.Error(w, "Failed to hash password", http.StatusInternalServerError)
@@ -30,19 +30,19 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
     }
     newUser.Password = string(hashedPassword)
 
-    // Save the user to the database
+    // Menyimpan pengguna ke database
     err = newUser.Save()
     if err != nil {
         http.Error(w, "Failed to register user", http.StatusInternalServerError)
         return
     }
 
-    // Respond with the newly registered user
+    // Tanggapi dengan pengguna yang baru terdaftar
     w.WriteHeader(http.StatusCreated)
     json.NewEncoder(w).Encode(newUser)
 }
 
-// LoginUser handles user login
+// LoginUser menangani login pengguna
 func LoginUser(w http.ResponseWriter, r *http.Request) {
     var loginData struct {
         Email    string `json:"email"`
@@ -54,40 +54,40 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // Find the user by email
+    // Menemukan pengguna melalui email
     user, err := models.GetUserByEmail(loginData.Email)
     if err != nil {
         http.Error(w, "User not found", http.StatusNotFound)
         return
     }
 
-    // Compare the hashed password with the provided password
+    // Bandingkan kata sandi hash dengan kata sandi yang diberikan
     if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginData.Password)); err != nil {
         http.Error(w, "Invalid email or password", http.StatusUnauthorized)
         return
     }
 
-    // Generate JWT token
+    // Hasilkan token JWT
     token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
         "email": user.Email,
         "id":    user.ID,
     })
 
-    // Sign the token with a secret key
+    // Tanda tangani token dengan kunci rahasia
     tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET_KEY")))
     if err != nil {
         http.Error(w, "Failed to generate token", http.StatusInternalServerError)
         return
     }
 
-    // Respond with the JWT token
+    // Merespons dengan token JWT
     w.WriteHeader(http.StatusOK)
     json.NewEncoder(w).Encode(map[string]string{"token": tokenString})
 }
 
-// UpdateUser handles updating user information
+// UpdateUser menangani pembaruan informasi pengguna
 func UpdateUser(w http.ResponseWriter, r *http.Request) {
-    // Extract user ID from request parameters
+    // Ekstrak ID pengguna dari parameter permintaan
     userIDStr := mux.Vars(r)["userId"]
     userID, err := strconv.Atoi(userIDStr)
     if err != nil {
@@ -95,7 +95,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // Decode request body into a user object
+    // Mendekode isi permintaan menjadi objek pengguna
     var updatedUser models.User
     err = json.NewDecoder(r.Body).Decode(&updatedUser)
     if err != nil {
@@ -103,28 +103,28 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // Get the user from the database
+    // Dapatkan pengguna dari database
     user, err := models.GetUserByID(uint(userID))
     if err != nil {
         http.Error(w, "User not found", http.StatusNotFound)
         return
     }
 
-    // Update user information
+    // Perbarui informasi pengguna
     err = user.Update(&updatedUser)
     if err != nil {
         http.Error(w, "Failed to update user", http.StatusInternalServerError)
         return
     }
 
-    // Respond with updated user information
+    // Merespons dengan informasi pengguna yang diperbarui
     w.WriteHeader(http.StatusOK)
     json.NewEncoder(w).Encode(updatedUser)
 }
 
-// DeleteUser handles deleting a user
+// DeleteUser menangani penghapusan pengguna
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
-    // Extract user ID from request parameters
+    // Ekstrak ID pengguna dari parameter permintaan
     userIDStr := mux.Vars(r)["userId"]
     userID, err := strconv.Atoi(userIDStr)
     if err != nil {
@@ -132,7 +132,7 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // Parse JWT token from request headers
+    // Mengurai token JWT dari header permintaan
     tokenString := r.Header.Get("Authorization")
     token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
         return []byte((os.Getenv("JWT_SECRET_KEY"))), nil
@@ -142,7 +142,7 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // Extract user ID from JWT claims
+    // Mengekstrak ID pengguna dari klaim JWT
     claims, ok := token.Claims.(jwt.MapClaims)
     if !ok || !token.Valid {
         http.Error(w, "Invalid token", http.StatusUnauthorized)
@@ -154,27 +154,27 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // Ensure that the user ID from the token matches the requested user ID
+    // Pastikan ID pengguna dari token cocok dengan ID pengguna yang diminta
     if userID != userIDFromToken {
         http.Error(w, "Unauthorized", http.StatusUnauthorized)
         return
     }
 
-    // Get the user from the database
+    // Dapatkan pengguna dari database
     user, err := models.GetUserByID(uint(userID))
     if err != nil {
         http.Error(w, "User not found", http.StatusNotFound)
         return
     }
 
-    // Delete the user
+    // Menghapus pengguna
     err = user.Delete()
     if err != nil {
         http.Error(w, "Failed to delete user", http.StatusInternalServerError)
         return
     }
 
-    // Respond with success message
+    // Tanggapi dengan pesan sukses
     w.WriteHeader(http.StatusOK)
     json.NewEncoder(w).Encode(map[string]string{"message": "User deleted successfully"})
 }

@@ -15,7 +15,6 @@ var DB *gorm.DB
 
 func InitDB() {
     var err error
-    // Replace the connection string placeholders with actual connection details
     connectionString := fmt.Sprintf(
         "host=%s port=%s user=%s dbname=%s password=%s sslmode=disable",
         os.Getenv("DB_HOST"),
@@ -29,15 +28,15 @@ func InitDB() {
         log.Fatal("Error connecting to database:", err)
     }
 
-    // Enable logging SQL statements (optional)
+    // Aktifkan pengelogan SQL
     DB.LogMode(true)
 
-    // Migrate the database schemas
+    // Memigrasikan skema database
     migrateDatabase()
 }
 
 func migrateDatabase() {
-    // Auto migrate database schemas
+    // Memigrasikan skema database secara otomatis
     err := DB.AutoMigrate(&User{}, &Photo{}, &Comment{}, &SocialMedia{}).Error
     if err != nil {
         log.Fatal("Error migrating database schemas:", err)
