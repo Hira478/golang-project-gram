@@ -1,0 +1,26 @@
+# Compiled binary files
+*.exe
+*.out
+
+# Dependency directories
+/vendor/
+/go.sum
+/go.mod
+
+# IDE/editor specific files
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+
+# Environment configuration file
+.env
+
+# Build output directories
+/bin/
+/build/
+
+# User-specific settings
+.vscode/
+.idea/
