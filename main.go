@@ -1,5 +1,3 @@
-// main.go
-
 package main
 
 import (
@@ -10,16 +8,22 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+    // Memuuat variabel lingkungan dari file .env
+    if err := godotenv.Load(); err != nil {
+        log.Fatal("Error loading .env file")
+    }
+
     // Menginisialisasi koneksi database
     models.InitDB()
 
     // Menginisialisasi router
     router := mux.NewRouter()
 
-    // Daftarkan rute untuk pengguna, foto, media sosial, dan komentar
+    // register rute untuk pengguna, foto, media sosial, dan komentar
     routes.SetupUserRoutes(router)
     routes.SetupPhotoRoutes(router)
     routes.SetupSocialMediaRoutes(router)

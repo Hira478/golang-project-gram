@@ -16,13 +16,13 @@ var DB *gorm.DB
 func InitDB() {
     var err error
     connectionString := fmt.Sprintf(
-        "host=%s port=%s user=%s dbname=%s password=%s sslmode=disable",
+        "host=%s port=%s user=%s dbname=%s password=%s sslmode=disable search_path=my_schema",
         os.Getenv("DB_HOST"),
         os.Getenv("DB_PORT"),
         os.Getenv("DB_USER"),
         os.Getenv("DB_NAME"),
         os.Getenv("DB_PASSWORD"),
-    )
+)
     DB, err = gorm.Open("postgres", connectionString)
     if err != nil {
         log.Fatal("Error connecting to database:", err)

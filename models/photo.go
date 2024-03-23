@@ -19,6 +19,10 @@ type Photo struct {
     UpdatedAt time.Time
 }
 
+func (p *Photo) TableName() string {
+    return "my_schema.photos"
+}
+
 // ErrPhotoNotFound adalah kesalahan yang dikembalikan ketika foto tidak ditemukan
 var ErrPhotoNotFound = errors.New("photo not found")
 

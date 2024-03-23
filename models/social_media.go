@@ -22,6 +22,10 @@ type SocialMedia struct {
     UpdatedAt      time.Time
 }
 
+func (s *SocialMedia) TableName() string {
+    return "my_schema.social_media"
+}
+
 // Simpan catatan media sosial baru ke dalam database
 func (sm *SocialMedia) Save() error {
     if err := DB.Create(sm).Error; err != nil {
