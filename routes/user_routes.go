@@ -13,5 +13,5 @@ func SetupUserRoutes(router *mux.Router) {
     router.HandleFunc("/users/register", controllers.RegisterUser).Methods("POST")
     router.HandleFunc("/users/login", controllers.LoginUser).Methods("POST")
     router.HandleFunc("/users/{userId}", controllers.UpdateUser).Methods("PUT")
-    router.HandleFunc("/users/{userId}", controllers.DeleteUser).Methods("DELETE") // New route for deleting user
+    router.HandleFunc("/users/{userId}", controllers.DeleteUser).Methods("DELETE")
 }

@@ -20,10 +20,6 @@ type User struct {
     UpdatedAt time.Time
 }
 
-func (u *User) TableName() string {
-    return "my_schema.users"
-}
-
 func (u *User) Save() error {
     if err := DB.Create(&u).Error; err != nil {
         return err

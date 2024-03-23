@@ -22,10 +22,6 @@ type Comment struct {
     UpdatedAt time.Time
 }
 
-func (c *Comment) TableName() string {
-    return "my_schema.comments"
-}
-
 // Simpan komentar baru ke dalam database
 func (c *Comment) Save() error {
     if err := DB.Create(c).Error; err != nil {
